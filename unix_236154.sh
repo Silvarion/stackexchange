@@ -17,9 +17,9 @@ do
 		then
 			if [[ "$result" = "" ]]
 			then
-				result="_2quotehere_${column}_2quotehere_"
+				result="_2quotehere_$(echo ${column} | sed 's/\"//g')_2quotehere_"
 			else
-				result="${result}|_2quotehere_${column}_2quotehere_"
+				result="${result}|_2quotehere_$( echo ${column} | sed 's/\"//g')_2quotehere_"
 			fi
 		else
 			if [[ "$result" = "" ]]
@@ -29,10 +29,11 @@ do
 				result="${result}|${column}"
 			fi
 		fi
-		echo $result | sed 's/_2quotehere_/"/g' > output.txt
 		(( counter+=1 ))
 	done
 	(( lineCounter+=1 ))
+	echo -e $result | sed 's/_2quotehere_/"/g' >> output.txt
+	result=""
 done < input.txt
 print "OUTPUT CONTENTS:"
 cat output.txt
